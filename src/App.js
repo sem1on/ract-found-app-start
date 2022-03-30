@@ -18,10 +18,18 @@ function App() {
         setPosts([...posts, newPost])
     };
 
+    const onRemove = (post) => {
+        setPosts(posts.filter(p => p.id !== post.id))
+    }
+
     return (
         <div className="App">
             <PostForm onAdd={onAdd}/>
-            <PostList posts={posts} title={'Список постов'}/>
+            <PostList 
+                posts={posts} 
+                title={'Список постов'}
+                onRemove={onRemove}
+                />
         </div>
     );
 }
