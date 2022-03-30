@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import PostList from './Components/PostList';
-import MyButton from './Components/UI/button/MyButton';
-import MyInput from './Components/UI/input/MyInput';
+import PostForm from './Components/PostForm';
+
 
 import './Styles/App.css';
 
@@ -13,31 +13,14 @@ function App() {
         {id: 2, title: 'PT', body: 'Description'},
         {id: 3, title: 'C#', body: 'Description'},
     ])
-    const [post, setPost] = useState({title: '', body: ''})
 
-    const addNewPost = (e) => {
-        e.preventDefault();
-        setPosts([...posts, {...post, id: Date.now()}]);
-        setPost({title: '', body: ''});
+    const onAdd = (newPost) => {
+        setPosts([...posts, newPost])
     };
 
     return (
         <div className="App">
-            <form>
-                <MyInput 
-                    type="text" 
-                    placeholder='Название поста'
-                    value={post.title}
-                    onChange={e => setPost({...post, title: e.target.value})}
-                />
-                <MyInput 
-                    value={post.body}
-                    onChange={e => setPost({...post, body: e.target.value})}
-                    type="text" 
-                    placeholder='Описание'
-                />
-                <MyButton onClick={addNewPost}>Создать пост</MyButton>
-            </form>
+            <PostForm onAdd={onAdd}/>
             <PostList posts={posts} title={'Список постов'}/>
         </div>
     );
