@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import PostList from './Components/PostList';
 import PostForm from './Components/PostForm';
-import MySelect from './Components/UI/select/MySelect';
-
+import PostFilter from './Components/PostFilter';
 
 import './Styles/App.css';
+
+
 
 function App() {
 
@@ -15,7 +16,18 @@ function App() {
         {id: 3, title: 'C#', body: 'Description'},
     ])
 
-    const [selectedSort, setSelectedSort] = useState('');
+    const [filter, setFilter] = useState({sort: '', query: ''});
+
+    const sortedPosts = useMemo(() => {
+        if(filter.sort) {
+            return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
+        }
+        return posts;
+    }, [filter.sort, posts]);
+
+    const sortedAndSearchedPosts = useMemo(() => {
+        return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query.toLowerCase()))
+    }, [filter.query, sortedPosts]);
 
     const onAdd = (newPost) => {
         setPosts([...posts, newPost])
@@ -23,30 +35,18 @@ function App() {
 
     const onRemove = (post) => {
         setPosts(posts.filter(p => p.id !== post.id))
-    }
-
-    const sortPost = (sort) => {
-        setSelectedSort(sort);
-        setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])));
-    }
+    };
 
     return (
         <div className="App">
             <PostForm onAdd={onAdd}/>
             <hr style={{margin: '15px 0'}} />
-            <div>
-                <MySelect 
-                    value={selectedSort}
-                    onChange={sortPost}
-                    defaultValue='Сортировка'
-                    options={[
-                        {value: 'title', name: 'По названию'},
-                        {value: 'body', name: 'По описанию'}
-                    ]}
-                />
-            </div>
-            {posts.length
-                ? <PostList  posts={posts}  title={'Список постов'} onRemove={onRemove}/>
+            <PostFilter 
+                filter={filter} 
+                setFilter={setFilter}
+            />
+            {sortedAndSearchedPosts.length
+                ? <PostList  posts={sortedAndSearchedPosts}  title={'Список постов'} onRemove={onRemove}/>
                 : <h1 style={{textAlign: 'center'}}> Посты не найдены</h1>
             }
         </div>
