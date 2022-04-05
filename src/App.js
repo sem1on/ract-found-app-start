@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
 
 import { usePosts } from './hooks/usePost';
+import { useFetching } from './hooks/useFetching';
+import { getPages } from './utils/pages';
 
 import PostList from './Components/PostList';
 import PostForm from './Components/PostForm';
 import PostFilter from './Components/PostFilter';
+import PostService from './API/PostService';
 
 import MyModal from './Components/UI/modal/MyModal';
 import MyButton from './Components/UI/button/MyButton';
+import Loader from './Components/UI/loader/Loader';
 
 import './Styles/App.css';
-import PostService from './API/PostService';
-import axios, { Axios } from 'axios';
-import Loader from './Components/UI/loader/Loader';
+import Pagination from './Components/UI/pagination/Pagination';
 
 
 function App() {
@@ -20,14 +22,25 @@ function App() {
     const [posts, setPosts] = useState([]);
     const [filter, setFilter] = useState({sort: '', query: ''});
     const [modal, setModal] = useState(false);
-    const [isPostLoading, setIsPostLoading] = useState(false);
-    const [totalCount, setTotalcount] = useState(0);
+    const [limit, setLimit] = useState(10);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
 
     const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
+    
+
+    const [fetchPosts, isPostLoading, postError] = useFetching( async () => {
+        const response = await PostService.getAll(limit, page);
+        setPosts(response.data);
+        const totalCount = (response.headers['x-total-count'])
+        setTotalPages(getPages(totalCount, limit))
+    })
+    
+
     useEffect(() => {
         fetchPosts()
-    }, [])
+    }, [page])
     
     const onAdd = (newPost) => {
         setPosts([...posts, newPost])
@@ -38,16 +51,9 @@ function App() {
         setPosts(posts.filter(p => p.id !== post.id))
     };
 
-
-    // 
-    async function fetchPosts() {
-        setIsPostLoading(true);
-        const posts = await PostService.getAll();
-        setPosts(posts);
-        setIsPostLoading(false);
-    };
-        
-    
+    const changePage = (page) => {
+        setPage(page)
+    }
 
 
     return (
@@ -64,11 +70,18 @@ function App() {
                 filter={filter} 
                 setFilter={setFilter}
             />
+            {postError &&
+                <h1>Произошла оштбка {postError}</h1>    
+            }
             {isPostLoading 
                 ? <div style={{display: 'flex', justifyContent:'center', marginTop: '50px'}}><Loader/></div> 
                 : <PostList posts={sortedAndSearchedPosts} title={'Список постов'} onRemove={onRemove}/>
             }
-            
+            <Pagination 
+                totalPages={totalPages} 
+                page={page} 
+                changePage={changePage}
+            />
         </div>
     );
 }
