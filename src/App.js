@@ -11,6 +11,8 @@ import MyButton from './Components/UI/button/MyButton';
 
 import './Styles/App.css';
 import PostService from './API/PostService';
+import axios, { Axios } from 'axios';
+import Loader from './Components/UI/loader/Loader';
 
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
     const [filter, setFilter] = useState({sort: '', query: ''});
     const [modal, setModal] = useState(false);
     const [isPostLoading, setIsPostLoading] = useState(false);
+    const [totalCount, setTotalcount] = useState(0);
 
     const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
@@ -35,13 +38,17 @@ function App() {
         setPosts(posts.filter(p => p.id !== post.id))
     };
 
+
+    // 
     async function fetchPosts() {
         setIsPostLoading(true);
-        await PostService.getAll()
-            .then(response => response.json())
-            .then(data => setPosts(data))
+        const posts = await PostService.getAll();
+        setPosts(posts);
         setIsPostLoading(false);
-    }
+    };
+        
+    
+
 
     return (
         <div className="App">
@@ -58,8 +65,8 @@ function App() {
                 setFilter={setFilter}
             />
             {isPostLoading 
-                ? <h1>Идет загрузка....</h1>
-                :<PostList posts={sortedAndSearchedPosts} title={'Список постов'} onRemove={onRemove}/>
+                ? <div style={{display: 'flex', justifyContent:'center', marginTop: '50px'}}><Loader/></div> 
+                : <PostList posts={sortedAndSearchedPosts} title={'Список постов'} onRemove={onRemove}/>
             }
             
         </div>
