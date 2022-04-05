@@ -6,11 +6,14 @@
 
 #root {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 
 .App {
     width: 800px;
+    margin: auto;
 }
 
 .post {
@@ -20,6 +23,10 @@
     margin-top: 15px;
     justify-content: space-between;
     align-items: center;
+}
+
+.post__btns {
+    display: flex;
 }
 
 .post-enter {
@@ -54,4 +61,17 @@
 .page__current {
     border: 2px solid orange;
     font-weight: bold;
+}
+
+.navbar {
+    height: 50px;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    background: lightseagreen;
+}
+
+.navbar__links {
+    margin-left: auto;
 }
