@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+
 import { AuthContext } from '../../../Context/context';
 import MyButton from '../button/MyButton';
+
 
 const Navbar = () => {
 
@@ -18,8 +20,8 @@ const Navbar = () => {
                 Выйти
             </MyButton>
             <div className="navbar__links">
-                <Link to='/about'>About</Link>
-                <Link to='/posts'>Posts</Link>
+                <Link to='/about'>О проекте</Link>
+                <Link to='/posts'>Посты</Link>
             </div>
         </div>
     );

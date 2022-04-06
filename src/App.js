@@ -3,9 +3,10 @@ import { BrowserRouter } from 'react-router-dom';
 
 import Navbar from './Components/UI/navbar/Navbar';
 
-import './Styles/App.css';
 import AppRouter from './Components/AppRouter';
 import { AuthContext } from './Context/context';
+
+import './Styles/App.css';
 
 
 function App() {

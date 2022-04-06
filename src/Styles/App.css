@@ -76,6 +76,10 @@
     margin-left: auto;
 }
 
+.navbar__links a {
+    margin-left: 25px;
+}
+
 .post__wrapper {
     width: 800px;
     margin: auto;

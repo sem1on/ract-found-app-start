@@ -1,15 +1,17 @@
 import React, { useContext } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 
+import { AuthContext } from '../Context/context';
+
 import About from '../pages/About';
 import Posts from '../pages/Posts';
 import Error from '../pages/Error';
-
-import '../Styles/App.css';
 import PostIdPage from '../pages/PostIdPage';
 import Login from '../pages/Login';
-import { AuthContext } from '../Context/context';
 import Loader from './UI/loader/Loader';
+
+import '../Styles/App.css';
+
 
 const AppRouter = () => {
 

@@ -1,7 +1,10 @@
 import React, { useContext } from 'react';
+
+import { AuthContext } from '../Context/context';
+
 import MyButton from '../Components/UI/button/MyButton';
 import MyInput from '../Components/UI/input/MyInput';
-import { AuthContext } from '../Context/context';
+
 
 const Login = () => {
 
